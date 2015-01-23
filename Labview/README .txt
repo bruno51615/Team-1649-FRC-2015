@@ -1,1 +1,4 @@
-http://www.pobots.com/files/8213/5726/0394/mecanum.pdf
+All files related with Labview should be placed here.
+
+If the joystick is not working on your machine, make sure you have the correct driver installed.
+Contact Bruno if you have trouble installing the driver.
