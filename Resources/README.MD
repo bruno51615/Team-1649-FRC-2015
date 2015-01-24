@@ -1,0 +1,1 @@
+All files related with Resources should be placed here.

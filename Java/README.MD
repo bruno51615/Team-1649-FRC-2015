@@ -1,0 +1,1 @@
+All files related with Java should be placed here.
