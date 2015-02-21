@@ -12,10 +12,12 @@
 
 namespace WPS {
 
-class DisabledState: public RobotState {
+class DisabledState: public WPS::RobotState {
 public:
 	DisabledState();
 	virtual ~DisabledState();
+
+
 };
 
 } /* namespace WPS */
