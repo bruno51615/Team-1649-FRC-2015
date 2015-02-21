@@ -8,7 +8,7 @@
 #ifndef SRC_DISABLEDSTATE_H_
 #define SRC_DISABLEDSTATE_H_
 
-#include <RobotState.h>
+#include "RobotState.h"
 
 namespace WPS {
 

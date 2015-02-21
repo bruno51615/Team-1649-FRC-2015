@@ -5,7 +5,9 @@
  *      Author: user
  */
 
-#include <DisabledState.h>
+#include "DisabledState.h"
+#include "Common1649.h"
+#include "Elevator.h"
 
 namespace WPS {
 
