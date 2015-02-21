@@ -18,4 +18,25 @@ DisabledState::~DisabledState() {
 	// TODO Auto-generated destructor stub
 }
 
+void DisabledState::Init(RobotComponents& parts)
+{
+
+}
+
+void DisabledState::OnEnter(RobotComponents& parts)
+{
+	parts.drive->MecanumDrive_Cartesian(0,0,0);
+	parts.elevator->Stop();
+}
+
+void DisabledState::Update(RobotComponents& parts)
+{
+
+}
+
+void DisabledState::OnExit(RobotComponents& parts)
+{
+
+}
+
 } /* namespace WPS */

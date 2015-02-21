@@ -17,6 +17,10 @@ public:
 	DisabledState();
 	virtual ~DisabledState();
 
+	virtual void Init(RobotComponents& parts); //Called once at the started of RobotMain
+	virtual void OnEnter(RobotComponents& parts); //Called each time the state is entered.
+	virtual void Update(RobotComponents& parts); //Called once per robot update frame.
+	virtual void OnExit(RobotComponents& parts); //Called each time the state is exited.
 
 };
 
