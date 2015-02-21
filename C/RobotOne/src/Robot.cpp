@@ -24,7 +24,7 @@ class Robot: public SampleRobot
 
 	// Robot control states
 	DisabledState	disabled;
-	RobotState&		curState;
+	RobotState*		curState;
 
 public:
 
@@ -39,30 +39,30 @@ public:
 					 DIOChannel1,	// Bottom Limit Switch
 					 DIOChannel2,	// Midpoint Switch
 					 0.75f),		// Elevator Speed Value
-			curState(disabled)		// Default to disabled
+			curState(nullptr)		// Default to disabled
 
 	{
 		myRobot.SetExpiration(0.1);
 	}
 
-	RobotState& ChooseState()
+	RobotState* ChooseState()
 	{
 		// Default to disabled
-		RobotState& nextState = disabled;
+		RobotState* nextState = &disabled;
 
 		if (IsEnabled())
 		{
 			if(IsAutonomous())
 			{
-				// curState = autonomous;
+				// curState = &autonomous;
 			}
 			else if(IsTest())
 			{
-				// curState = test;
+				// curState = &test;
 			}
 			else if(IsOperatorControl())
 			{
-				// curState = teleop;
+				// curState = &teleop;
 			}
 		}
 
@@ -91,25 +91,32 @@ public:
 		parts.driverStation = m_ds;
 		parts.elevator = &elevator;
 
+		// Start the robot disabled
+		curState = &disabled;
+		curState->OnEnter(parts);
+
 		// Main loop: Does not exit
 		while (true)
 		{
 			// Choose state
-			RobotState& lastState = curState;
+			RobotState* lastState = curState;
 			curState = ChooseState();
 
 			// Compare the two states by address to see if they are different
-			if (&lastState != &curState)
+			if (lastState != curState)
 			{
 				// Exit the last state
-				lastState.OnExit(parts);
+				lastState->OnExit(parts);
 
 				// Enter the current state
-				curState.OnEnter(parts);
+				curState->OnEnter(parts);
 			}
 
 			// Update the current state
-			curState.Update(parts);
+			curState->Update(parts);
+
+			// Elevator needs to update here due to our saftey switches
+			elevator.Update();
 
 			// Wait for data from the driver station
 			m_ds->WaitForData();
