@@ -15,9 +15,10 @@ class USBCamera;
 
 struct RobotComponents
 {
-	RobotDrive*	drive;
-	Elevator*	elevator;
-	USBCamera*	camera;
+	RobotDrive*		drive;
+	Elevator*		elevator;
+	USBCamera*		camera;
+	DriverStation*	driverStation;
 };
 
 #endif /* SRC_ROBOTCOMPONENTS_H_ */
