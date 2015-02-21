@@ -29,6 +29,7 @@ void DisabledState::OnEnter(RobotComponents& parts)
 {
 	parts.drive->MecanumDrive_Cartesian(0,0,0);
 	parts.elevator->Stop();
+	parts.driverStation->InDisabled(true);
 }
 
 void DisabledState::Update(RobotComponents& parts)
@@ -38,7 +39,7 @@ void DisabledState::Update(RobotComponents& parts)
 
 void DisabledState::OnExit(RobotComponents& parts)
 {
-
+	parts.driverStation->InDisabled(false);
 }
 
 } /* namespace WPS */
