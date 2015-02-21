@@ -8,6 +8,14 @@
 #ifndef SRC_COMMON1649_H_
 #define SRC_COMMON1649_H_
 
+// Base header file for FRC
+#include "WPILib.h"
+
+// Robot componet structure
+#include "RobotComponents.h"
+
+// Channel ID enumerations
+
 enum PWMChannel
 {
 	PWMChannel0 = 0,
@@ -45,8 +53,5 @@ enum DIOChannel
 	DIOChannel8,
 	DIOChannel9,
 };
-
-
-
 
 #endif /* SRC_COMMON1649_H_ */
