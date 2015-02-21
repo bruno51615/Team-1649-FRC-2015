@@ -10,48 +10,55 @@
  * don't. Unless you know what you are doing, complex code will be much more difficult under
  * this system. Use IterativeRobot or Command-Based instead if you're new.
  */
+
+enum PWMChannel
+{
+	PWMChannel0 = 0,
+	PWMChannel1,
+	PWMChannel2,
+	PWMChannel3,
+	PWMChannel4,
+	PWMChannel5,
+	PWMChannel6,
+	PWMChannel7,
+	PWMChannel8,
+	PWMChannel9,
+};
+
+enum USBId
+{
+	USBId0 = 0,
+	USBId1,
+	USBId2,
+	USBId3,
+	USBId4,
+	USBId5,
+};
+
 class Robot: public SampleRobot
 {
-	RobotDrive myRobot; // robot drive system
-	Joystick stick; // only joystick
+	RobotDrive	myRobot; 		// robot drive system
+	Joystick	stick; 			// Primary control stick
+	Joystick    buttonPanel;	// Optional button panel
 
 public:
+
+	// Robot constructor: Setup robot components to "safe" state
 	Robot() :
-			myRobot(0, 1),	// these must be initialized in the same order
-			stick(0)		// as they are declared above.
+			myRobot(PWMChannel0,	// Front Left
+					PWMChannel2,	// Rear Left
+					PWMChannel1,	// Front Right
+					PWMChannel3), 	// Rear Right
+			stick(USBId0),			// Primary control Joystick
+			buttonPanel(USBId1)		// Aux button panel
 	{
 		myRobot.SetExpiration(0.1);
 	}
 
-	/**
-	 * Drive left & right motors for 2 seconds then stop
-	 */
-	void Autonomous()
+	// Main entry point for our code
+	void RobotMain()
 	{
-		myRobot.SetSafetyEnabled(false);
-		myRobot.Drive(-0.5, 0.0); 	// drive forwards half speed
-		Wait(2.0); 				//    for 2 seconds
-		myRobot.Drive(0.0, 0.0); 	// stop robot
-	}
 
-	/**
-	 * Runs the motors with arcade steering.
-	 */
-	void OperatorControl()
-	{
-		myRobot.SetSafetyEnabled(true);
-		while (IsOperatorControl() && IsEnabled())
-		{
-			myRobot.ArcadeDrive(stick); // drive with arcade style (use right stick)
-			Wait(0.005);				// wait for a motor update time
-		}
-	}
-
-	/**
-	 * Runs during test mode
-	 */
-	void Test()
-	{
 	}
 };
 
