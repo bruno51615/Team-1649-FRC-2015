@@ -26,8 +26,6 @@ class Robot: public SampleRobot
 	DisabledState	disabled;
 	RobotState&		curState;
 
-	RobotComponents components;
-
 public:
 
 	// Robot constructor: Setup robot components to "safe" state
@@ -47,10 +45,75 @@ public:
 		myRobot.SetExpiration(0.1);
 	}
 
+	RobotState& ChooseState()
+	{
+		// Default to disabled
+		RobotState& nextState = disabled;
+
+		if (IsEnabled())
+		{
+			if(IsAutonomous())
+			{
+				// curState = autonomous;
+			}
+			else if(IsTest())
+			{
+				// curState = test;
+			}
+			else if(IsOperatorControl())
+			{
+				// curState = teleop;
+			}
+		}
+
+		return nextState;
+	}
+
+	void RobotInit()
+	{
+		RobotComponents parts;
+		parts.drive = &myRobot;
+		parts.driverStation = m_ds;
+		parts.elevator = &elevator;
+
+		disabled.Init(parts);
+	}
+
 	// Main entry point for our code
 	void RobotMain()
 	{
+		// first and one-time initialization
+		RobotInit();
 
+		// Collect the parts of the robot to pass into the states
+		RobotComponents parts;
+		parts.drive = &myRobot;
+		parts.driverStation = m_ds;
+		parts.elevator = &elevator;
+
+		// Main loop: Does not exit
+		while (true)
+		{
+			// Choose state
+			RobotState& lastState = curState;
+			curState = ChooseState();
+
+			// Compare the two states by address to see if they are different
+			if (&lastState != &curState)
+			{
+				// Exit the last state
+				lastState.OnExit(parts);
+
+				// Enter the current state
+				curState.OnEnter(parts);
+			}
+
+			// Update the current state
+			curState.Update(parts);
+
+			// Wait for data from the driver station
+			m_ds->WaitForData();
+		}
 	}
 };
 
