@@ -1,5 +1,5 @@
 #include "WPILib.h"
-
+#include "Common1649.h"
 /**
  * This is a demo program showing the use of the RobotDrive class.
  * The SampleRobot class is the base of a robot application that will automatically call your
@@ -11,29 +11,7 @@
  * this system. Use IterativeRobot or Command-Based instead if you're new.
  */
 
-enum PWMChannel
-{
-	PWMChannel0 = 0,
-	PWMChannel1,
-	PWMChannel2,
-	PWMChannel3,
-	PWMChannel4,
-	PWMChannel5,
-	PWMChannel6,
-	PWMChannel7,
-	PWMChannel8,
-	PWMChannel9,
-};
 
-enum USBId
-{
-	USBId0 = 0,
-	USBId1,
-	USBId2,
-	USBId3,
-	USBId4,
-	USBId5,
-};
 
 class Robot: public SampleRobot
 {
