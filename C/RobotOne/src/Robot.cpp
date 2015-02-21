@@ -23,6 +23,9 @@ class Robot: public SampleRobot
 	Elevator	elevator;		// Elevator control system
 
 	// Robot control states
+	// TeleopState	teleop;
+	// AutoState	autonomous;
+	// TestState	test;
 	DisabledState	disabled;
 	RobotState*		curState;
 
