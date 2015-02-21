@@ -11,14 +11,20 @@
 
 #include "Common1649.h"
 #include "Elevator.h"
+#include "DisabledState.h"
+
+namespace WPS
+{
 
 class Robot: public SampleRobot
 {
 	// Objects the robot owns
 	RobotDrive	myRobot; 		// robot drive system
 	Elevator	elevator;		// Elevator control system
-	Joystick	stick; 			// Primary control stick
-	Joystick    buttonPanel;	// Optional button panel
+
+	// Robot control states
+	DisabledState	disabled;
+	RobotState&		curState;
 
 	RobotComponents components;
 
@@ -35,8 +41,8 @@ public:
 					 DIOChannel1,	// Bottom Limit Switch
 					 DIOChannel2,	// Midpoint Switch
 					 0.75f),		// Elevator Speed Value
-			stick(USBId0),			// Primary control Joystick
-			buttonPanel(USBId1)		// Aux button panel
+			curState(disabled)		// Default to disabled
+
 	{
 		myRobot.SetExpiration(0.1);
 	}
@@ -48,4 +54,6 @@ public:
 	}
 };
 
-START_ROBOT_CLASS(Robot);
+}
+
+START_ROBOT_CLASS(WPS::Robot);
