@@ -19,6 +19,7 @@ struct RobotComponents
 	Elevator*		elevator;
 	USBCamera*		camera;
 	DriverStation*	driverStation;
+	Joystick*		joystick;
 };
 
 #endif /* SRC_ROBOTCOMPONENTS_H_ */

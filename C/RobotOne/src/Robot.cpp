@@ -12,6 +12,7 @@
 #include "Common1649.h"
 #include "Elevator.h"
 #include "DisabledState.h"
+#include "Teleop.h"
 
 namespace WPS
 {
@@ -26,6 +27,7 @@ class Robot: public SampleRobot
 	// TeleopState	teleop;
 	// AutoState	autonomous;
 	// TestState	test;
+	Teleop			teleop;
 	DisabledState	disabled;
 	RobotState*		curState;
 
@@ -65,7 +67,7 @@ public:
 			}
 			else if(IsOperatorControl())
 			{
-				// curState = &teleop;
+				curState = &teleop;
 			}
 		}
 
