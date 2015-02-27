@@ -39,7 +39,7 @@ void Teleop::Update(RobotComponents& parts)
 	float x = parts.joystick->GetX();
 	float y = parts.joystick->GetY();
 	float z = parts.joystick->GetZ();
-
+										//X, Y, Rotation
 	parts.drive->MecanumDrive_Cartesian(x, y, z);
 }
 
