@@ -19,16 +19,17 @@ Teleop::Teleop()
 
 Teleop::~Teleop()
 {
-	// TODO Auto-generated destructor stub
+
 }
 
 void Teleop::Init(RobotComponents& parts)
 {
-	//TODO add constructor
+
 }
 
 void Teleop::OnEnter(RobotComponents& parts)
 {
+
 	parts.drive->MecanumDrive_Cartesian(0,0,0);
 	parts.elevator->Stop();
 	parts.driverStation->InDisabled(true);
@@ -36,16 +37,72 @@ void Teleop::OnEnter(RobotComponents& parts)
 
 void Teleop::Update(RobotComponents& parts)
 {
-	float x = parts.joystick->GetX();
-	float y = parts.joystick->GetY();
-	float z = parts.joystick->GetZ();
-										//X, Y, Rotation
-	parts.drive->MecanumDrive_Cartesian(x, y, z);
+	float mult = jos->GetThrottle();
+	float x = jos->GetX();
+	float y = jos->GetY();
+	float z = jos->GetZ();
+	float pov = jos->GetPOV();
+	parts.drive->MecanumDrive_Cartesian(this->subtractDeadzone(x), this->subtractDeadzone(y), this->subtractDeadzone(z));
+	if (parts.elevator->allowupswitch() && ((pov == 0) ))
+	{
+		parts.elevator->MoveUp();
+		parts.elevator->Stop();
+	}
+	if (parts.elevator->allowdownswitch() && (pov == 180))
+	{
+		parts.elevator->MoveDown();
+		parts.elevator->Stop();
+	}
 }
 
 void Teleop::OnExit(RobotComponents& parts)
 {
+	delete jos, brick;
 	parts.driverStation->InDisabled(false);
+}
+
+float Teleop::subtractDeadzone(float _this)
+{
+	if (_this < 0.4)
+	{
+		return 0;
+	}
+	else
+	{
+		return _this;
+	}
+}
+
+float Teleop::doThrottle(float val, float min, float max, float thr)
+{
+	bool isNegative;
+
+	if (val >= 0)
+	{
+		isNegative = false;
+	}
+	else
+	{
+		isNegative = true;
+	}
+
+	float foo = max - min;
+	foo *= thr;
+
+	val = val.absValueFromSomeMathIncludeHere();
+
+	val *= foo;
+
+	val += min;
+
+	if (isNegative)
+	{
+		val *= -1;
+	}
+
+	return val;
+
+
 }
 
 } /* namespace WPS */
