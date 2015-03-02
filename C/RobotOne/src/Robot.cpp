@@ -26,6 +26,7 @@ class Robot: public SampleRobot
 	// TeleopState	teleop;
 	// AutoState	autonomous;
 	// TestState	test;
+	USBCamera*		camera;
 	Teleop			teleop;
 	DisabledState	disabled;
 	RobotState*		curState;
@@ -81,6 +82,13 @@ public:
 
 		CameraServer::GetInstance()->StartAutomaticCapture("cam0");
 
+		//Start camera (not sure which one will work)
+		camera = new USBCamera(std::string("cam0"), USBCamera::kDefaultCameraName);
+
+		camera->OpenCamera();
+		camera->SetFPS(30);
+		camera->SetSize(300, 300);
+		camera->UpdateSettings();
 
 		disabled.Init(parts);
 	}
@@ -130,6 +138,7 @@ public:
 			//Update Camera
 			Image* frame = imaqCreateImage(IMAQ_IMAGE_U8, 0);
 			CameraServer::GetInstance()->SetImage(frame);
+			camera->UpdateSettings();
 		}
 	}
 };
