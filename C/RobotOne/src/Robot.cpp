@@ -39,11 +39,7 @@ public:
 					PWMChannel2,	// Rear Left
 					PWMChannel1,	// Front Right
 					PWMChannel3), 	// Rear Right
-			elevator(PWMChannel4,	// Elevator Motor
-					 DIOChannel0,	// Top Limit Switch
-					 DIOChannel1,	// Bottom Limit Switch
-					 DIOChannel2,	// Midpoint Switch
-					 0.75f),		// Elevator Speed Value
+			elevator(),		// Elevator Constructor
 			curState(nullptr)		// Default to disabled
 
 	{

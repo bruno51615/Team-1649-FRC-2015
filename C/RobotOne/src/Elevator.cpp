@@ -7,92 +7,103 @@
 
 #include <Elevator.h>
 #include <cmath>
+#include "Common1649.h"
 
+
+Elevator::Elevator():
+	elevatorMotor(PWMChannel4),
+	allowUpSwitch(DIOChannel0),
+	allowDownSwitch(DIOChannel1),
+	atMid(DIOChannel2),
+	desiredDir(EDirStop),
+	motorSpeed(0.75f)
+{
+	elevatorMotor.SetExpiration(0.1);
+}
+/* Error: expected ')' before 'motorId' ???
 Elevator::Elevator(PWMChannel motorId,DIOChannel toplimit,DIOChannel bottomlimit,
 		DIOChannel midpoint, float speed):
-elevatormotor(motorId),
-allowupswitch(toplimit),
-allowdownswitch(bottomlimit),
-atmid(midpoint),
-desireddir(EDirStop),
-motorspeed(speed)
+	elevatorMotor(motorId),
+	allowUpSwitch(toplimit),
+	allowDownSwitch(bottomlimit),
+	atMid(midpoint),
+	desiredDir(EDirStop),
+	motorSpeed(speed)
 {
 	// TODO Auto-generated constructor stub
-	elevatormotor.SetExpiration(0.1);
+	elevatorMotor.SetExpiration(0.1);
 
 }
 
+*/
 Elevator::~Elevator() {
 	// TODO Auto-generated destructor stub
 }
 
 void Elevator::MoveUp ()
 {
-	desireddir = EDirUp;
+	desiredDir = EDirUp;
 }
 void Elevator::MoveDown ()
 {
-	desireddir = EDirDown;
+	desiredDir = EDirDown;
 }
 void Elevator::Stop ()
 {
-	desireddir = EDirStop;
+	desiredDir = EDirStop;
 }
 
 // Indicators
 bool Elevator::IsAtBottom ()
 {
 	bool atbottom = true;
-	atbottom = allowdownswitch.Get() == false;
+	atbottom = allowDownSwitch.Get() == false;
 	return atbottom;
 }
 
 bool Elevator::IsAtTop ()
 {
 	bool attop = true;
-	attop = allowupswitch.Get() == false;
+	attop = allowUpSwitch.Get() == false;
 	return attop;
 }
 bool Elevator::IsAtMid ()
 {
-	return atmid.Get();
+	return atMid.Get();
 }
 bool Elevator::IsMoving ()
 {
-	return (std::fabs(elevatormotor.Get()) > 0);
+	return (std::fabs(elevatorMotor.Get()) > 0);
 }
 float Elevator::GetSpeed()
 {
-	return motorspeed;
+	return motorSpeed;
 }
 
 //Periodic Update Function
 void Elevator::Update ()
 {
 	float speed = 0;
-	bool allowup = allowupswitch.Get();
-	bool allowdown = allowdownswitch.Get();
+	bool allowup = allowUpSwitch.Get();
+	bool allowdown = allowDownSwitch.Get();
+
 	if(allowup || allowdown)
 	{
-		if(allowup && (EDirUp == desireddir))
+		if(allowup && (EDirUp == desiredDir))
 		{
-			speed = -motorspeed;
+			speed = -motorSpeed;
 		}
-		else if(allowdown && (EDirDown == desireddir))
+		else if(allowdown && (EDirDown == desiredDir))
 		{
-			speed = motorspeed;
+			speed = motorSpeed;
 		}
 	}
 
-
-
-
-
-	elevatormotor.Set(speed);
+	elevatorMotor.Set(speed);
 }
 
 //Set Functions
 void Elevator::SetSpeed(float speed)
 {
-	motorspeed = speed;
+	motorSpeed = speed;
 }

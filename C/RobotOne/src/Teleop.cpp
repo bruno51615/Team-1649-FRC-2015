@@ -9,6 +9,7 @@
 #include "Teleop.h"
 #include "Common1649.h"
 #include "Elevator.h"
+#include <cmath>;
 
 namespace WPS {
 
@@ -38,17 +39,20 @@ void Teleop::OnEnter(RobotComponents& parts)
 void Teleop::Update(RobotComponents& parts)
 {
 	float mult = jos->GetThrottle();
-	float x = jos->GetX();
-	float y = jos->GetY();
-	float z = jos->GetZ();
+	float x = jos->GetX() * mult;
+	float y = jos->GetY() * mult;
+	float z = jos->GetZ() * mult;
 	float pov = jos->GetPOV();
+
 	parts.drive->MecanumDrive_Cartesian(this->subtractDeadzone(x), this->subtractDeadzone(y), this->subtractDeadzone(z));
-	if (parts.elevator->allowupswitch() && ((pov == 0) ))
+
+	//Elevator update
+	if ((!parts.elevator->IsAtTop()) && ((pov == 0) ))
 	{
 		parts.elevator->MoveUp();
 		parts.elevator->Stop();
 	}
-	if (parts.elevator->allowdownswitch() && (pov == 180))
+	if ((!parts.elevator->IsAtBottom()) && (pov == 180))
 	{
 		parts.elevator->MoveDown();
 		parts.elevator->Stop();
@@ -57,7 +61,8 @@ void Teleop::Update(RobotComponents& parts)
 
 void Teleop::OnExit(RobotComponents& parts)
 {
-	delete jos, brick;
+	delete jos;
+	delete brick;
 	parts.driverStation->InDisabled(false);
 }
 
@@ -89,7 +94,7 @@ float Teleop::doThrottle(float val, float min, float max, float thr)
 	float foo = max - min;
 	foo *= thr;
 
-	val = val.absValueFromSomeMathIncludeHere();
+	val = std::abs(val);
 
 	val *= foo;
 

@@ -11,11 +11,11 @@
 #include <DigitalInput.h>
 #include "Common1649.h"
 
-
 class Elevator {
 public:
-	Elevator(PWMChannel motorId,DIOChannel toplimit,DIOChannel bottomlimit,
-			DIOChannel midpoint, float speed);
+	Elevator();
+	//Elevator(PWMChannel motorId,DIOChannel toplimit,DIOChannel bottomlimit,
+			//DIOChannel midpoint, float speed);
 	virtual ~Elevator();
 	// Elevator Actions
 	void MoveUp ();
@@ -43,14 +43,16 @@ private:
 		EDirStop = 0,
 		EDirDown = 1
 	};
-	Talon elevatormotor ;
-	DigitalInput allowupswitch ;
-	DigitalInput allowdownswitch ;
-	DigitalInput atmid;
-	ElevatorDirection desireddir;
-	float motorspeed;
+	Talon elevatorMotor ;
+	DigitalInput allowUpSwitch ;
+	DigitalInput allowDownSwitch ;
+	DigitalInput atMid;
+	ElevatorDirection desiredDir;
+	float motorSpeed;
 
 
 };
+
+
 
 #endif /* SRC_ELEVATOR_H_ */
