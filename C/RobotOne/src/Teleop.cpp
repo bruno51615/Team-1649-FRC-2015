@@ -57,6 +57,11 @@ void Teleop::Update(RobotComponents& parts)
 		parts.elevator->MoveDown();
 		parts.elevator->Stop();
 	}
+
+	if(parts.elevator->IsAtMid())
+	{
+		SmartDashboard:: PutString("Middle switch hit!", 0);
+	}
 }
 
 void Teleop::OnExit(RobotComponents& parts)

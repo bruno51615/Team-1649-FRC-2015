@@ -22,7 +22,6 @@ class Robot: public SampleRobot
 	// Objects the robot owns
 	RobotDrive	myRobot; 		// robot drive system
 	Elevator	elevator;		// Elevator control system
-
 	// Robot control states
 	// TeleopState	teleop;
 	// AutoState	autonomous;
@@ -77,6 +76,12 @@ public:
 		parts.driverStation = m_ds;
 		parts.elevator = &elevator;
 
+		//Start camera
+		CameraServer::GetInstance()->SetQuality(50);
+
+		CameraServer::GetInstance()->StartAutomaticCapture("cam0");
+
+
 		disabled.Init(parts);
 	}
 
@@ -121,6 +126,10 @@ public:
 
 			// Wait for data from the driver station
 			m_ds->WaitForData();
+
+			//Update Camera
+			Image* frame = imaqCreateImage(IMAQ_IMAGE_U8, 0);
+			CameraServer::GetInstance()->SetImage(frame);
 		}
 	}
 };
