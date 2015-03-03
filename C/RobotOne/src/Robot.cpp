@@ -77,18 +77,20 @@ public:
 		parts.driverStation = m_ds;
 		parts.elevator = &elevator;
 
+
+
 		//Start camera
-		CameraServer::GetInstance()->SetQuality(50);
-
-		CameraServer::GetInstance()->StartAutomaticCapture("cam0");
-
-		//Start camera (not sure which one will work)
 		camera = new USBCamera(std::string("cam0"), USBCamera::kDefaultCameraName);
 
 		camera->OpenCamera();
 		camera->SetFPS(30);
 		camera->SetSize(300, 300);
 		camera->UpdateSettings();
+
+		//Sends camera to the dashboard.
+		CameraServer::GetInstance()->SetQuality(50);
+		CameraServer::GetInstance()->StartAutomaticCapture(USBCamera::kDefaultCameraName);
+		CameraServer::GetInstance()->SetSize(300);
 
 		disabled.Init(parts);
 	}

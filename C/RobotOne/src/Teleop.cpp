@@ -9,7 +9,6 @@
 #include "Teleop.h"
 #include "Common1649.h"
 #include "Elevator.h"
-#include <cmath>;
 
 namespace WPS {
 
@@ -39,12 +38,14 @@ void Teleop::OnEnter(RobotComponents& parts)
 void Teleop::Update(RobotComponents& parts)
 {
 	float mult = jos->GetThrottle();
-	float x = jos->GetX() * mult;
-	float y = jos->GetY() * mult;
-	float z = jos->GetZ() * mult;
+	float x = jos->GetX();
+	float y = jos->GetY();
+	float z = jos->GetZ();
 	float pov = jos->GetPOV();
 
-	parts.drive->MecanumDrive_Cartesian(this->subtractDeadzone(x), this->subtractDeadzone(y), this->subtractDeadzone(z));
+	parts.drive->MecanumDrive_Cartesian(this->doThrottle(this->subtractDeadzone(x), 0, 1, mult),
+										this->doThrottle(this->subtractDeadzone(y), 0, 1, mult),
+										this->doThrottle(this->subtractDeadzone(z), 0, 1, mult));
 
 	//Elevator update
 	if ((!parts.elevator->IsAtTop()) && ((pov == 0) ))
