@@ -54,4 +54,11 @@ enum DIOChannel
 	DIOChannel9,
 };
 
+
+template<typename V>
+V clampValue(V minimum, V maximum, V value)
+{
+	return std::min<V>(std::max<V>(value, minimum), maximum);
+}
+
 #endif /* SRC_COMMON1649_H_ */

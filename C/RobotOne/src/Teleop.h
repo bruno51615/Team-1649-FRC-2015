@@ -23,8 +23,8 @@ public:
 	virtual void OnExit(RobotComponents& parts); //Called each time the state is exited.
 
 private:
-	Joystick* jos = new Joystick(0, 4, 0);
-	Joystick* brick = new Joystick(1, 0, 10);
+	Joystick jos;
+	Joystick brick;
 	float subtractDeadzone(float _this);
 	float doThrottle(float val, float min, float max, float thr);
 
