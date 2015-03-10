@@ -22,11 +22,11 @@ class Robot: public SampleRobot
 	// Objects the robot owns
 	RobotDrive	myRobot; 		// robot drive system
 	Elevator	elevator;		// Elevator control system
+	USBCamera	camera;			// robot camera
+
 	// Robot control states
-	// TeleopState	teleop;
 	// AutoState	autonomous;
 	// TestState	test;
-	USBCamera*		camera;
 	Teleop			teleop;
 	DisabledState	disabled;
 	RobotState*		curState;
@@ -35,12 +35,21 @@ public:
 
 	// Robot constructor: Setup robot components to "safe" state
 	Robot() :
-			myRobot(PWMChannel0,	// Front Left
-					PWMChannel2,	// Rear Left
-					PWMChannel1,	// Front Right
-					PWMChannel3), 	// Rear Right
-			elevator(),		// Elevator Constructor
-			curState(nullptr)		// Default to disabled
+			myRobot(PWMChannel0,					// Front Left
+					PWMChannel2,					// Rear Left
+					PWMChannel1,					// Front Right
+					PWMChannel3), 					// Rear Right
+
+			elevator(PWMChannel4,					// Elevator Motor
+					 DIOChannel0,					// Top limit switch
+					 DIOChannel1,					// Bottom limit switch
+					 DIOChannel2,					// Midpoint switch
+					 0.75f),						// Elevator speed
+
+			camera(USBCamera::kDefaultCameraName,	// Default Camera Name "cam0"
+				   true),							// Use JPEG format
+
+			curState(nullptr)						// Default to disabled
 
 	{
 		myRobot.SetExpiration(0.1);
@@ -78,18 +87,15 @@ public:
 		parts.elevator = &elevator;
 
 
-
 		//Start camera
-		camera = new USBCamera(std::string("cam0"), USBCamera::kDefaultCameraName);
-
-		camera->OpenCamera();
-		camera->SetFPS(30);
-		camera->SetSize(300, 300);
-		camera->UpdateSettings();
+		camera.OpenCamera();
+		camera.SetFPS(30);
+		camera.SetSize(300, 300);
+		camera.UpdateSettings();
 
 		//Sends camera to the dashboard.
-		CameraServer::GetInstance()->SetQuality(50);
 		CameraServer::GetInstance()->StartAutomaticCapture(USBCamera::kDefaultCameraName);
+		CameraServer::GetInstance()->SetQuality(50);
 		CameraServer::GetInstance()->SetSize(300);
 
 		disabled.Init(parts);
@@ -134,13 +140,9 @@ public:
 			// Elevator needs to update here due to our saftey switches
 			elevator.Update();
 
+			// Should be the last thing in the frame
 			// Wait for data from the driver station
 			m_ds->WaitForData();
-
-			//Update Camera
-			Image* frame = imaqCreateImage(IMAQ_IMAGE_U8, 0);
-			CameraServer::GetInstance()->SetImage(frame);
-			camera->UpdateSettings();
 		}
 	}
 };
