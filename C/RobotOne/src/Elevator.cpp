@@ -9,18 +9,7 @@
 #include <cmath>
 #include "Common1649.h"
 
-
-Elevator::Elevator():
-	elevatorMotor(PWMChannel4),
-	allowUpSwitch(DIOChannel0),
-	allowDownSwitch(DIOChannel1),
-	atMid(DIOChannel2),
-	desiredDir(EDirStop),
-	motorSpeed(0.75f)
-{
-	elevatorMotor.SetExpiration(0.1);
-}
-/* Error: expected ')' before 'motorId' ???
+/* Error: expected ')' before 'motorId' ???*/
 Elevator::Elevator(PWMChannel motorId,DIOChannel toplimit,DIOChannel bottomlimit,
 		DIOChannel midpoint, float speed):
 	elevatorMotor(motorId),
@@ -35,7 +24,6 @@ Elevator::Elevator(PWMChannel motorId,DIOChannel toplimit,DIOChannel bottomlimit
 
 }
 
-*/
 Elevator::~Elevator() {
 	// TODO Auto-generated destructor stub
 }

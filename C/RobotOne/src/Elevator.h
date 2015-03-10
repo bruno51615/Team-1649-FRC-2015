@@ -7,15 +7,16 @@
 
 #ifndef SRC_ELEVATOR_H_
 #define SRC_ELEVATOR_H_
-#include <Talon.h>
-#include <DigitalInput.h>
 #include "Common1649.h"
 
 class Elevator {
 public:
-	Elevator();
-	//Elevator(PWMChannel motorId,DIOChannel toplimit,DIOChannel bottomlimit,
-			//DIOChannel midpoint, float speed);
+	Elevator(
+			PWMChannel motorId,
+			DIOChannel toplimit,
+			DIOChannel bottomlimit,
+			DIOChannel midpoint,
+			float speed);
 	virtual ~Elevator();
 	// Elevator Actions
 	void MoveUp ();
