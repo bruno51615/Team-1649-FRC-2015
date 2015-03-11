@@ -20,42 +20,42 @@ namespace WPS
 class Robot: public SampleRobot
 {
 	// Objects the robot owns
-	RobotDrive	myRobot; 		// robot drive system
-	Elevator	elevator;		// Elevator control system
-	USBCamera	camera;			// robot camera
+	RobotDrive	m_mainDrive; 		// robot drive system
+	Elevator	m_elevator;		// m_elevator control system
+	USBCamera	m_camera;			// robot m_camera
 
 	// Robot control states
 	// AutoState	autonomous;
 	// TestState	test;
 	Teleop			teleop;
 	DisabledState	disabled;
-	RobotState*		curState;
+	RobotState*		m_curState;
 
 public:
 
 	// Robot constructor: Setup robot components to "safe" state
-	Robot() :
-			myRobot(PWMChannel0,					// Front Left
+	Robot::Robot() :
+			m_mainDrive(PWMChannel0,					// Front Left
 					PWMChannel2,					// Rear Left
 					PWMChannel1,					// Front Right
 					PWMChannel3), 					// Rear Right
 
-			elevator(PWMChannel4,					// Elevator Motor
+			m_elevator(PWMChannel4,					// m_elevator Motor
 					 DIOChannel0,					// Top limit switch
 					 DIOChannel1,					// Bottom limit switch
 					 DIOChannel2,					// Midpoint switch
-					 0.75f),						// Elevator speed
+					 0.75f),						// m_elevator speed
 
-			camera(USBCamera::kDefaultCameraName,	// Default Camera Name "cam0"
+			m_camera(USBCamera::kDefaultCameraName,	// Default m_camera Name "cam0"
 				   true),							// Use JPEG format
 
-			curState(nullptr)						// Default to disabled
+			m_curState(nullptr)						// Default to disabled
 
 	{
-		myRobot.SetExpiration(0.1);
+		m_mainDrive.SetExpiration(0.1);
 	}
 
-	RobotState* ChooseState()
+	RobotState* Robot::ChooseState()
 	{
 		// Default to disabled
 		RobotState* nextState = &disabled;
@@ -72,28 +72,28 @@ public:
 			}
 			else if(IsOperatorControl())
 			{
-				curState = &teleop;
+				m_curState = &teleop;
 			}
 		}
 
 		return nextState;
 	}
 
-	void RobotInit()
+	void Robot::RobotInit()
 	{
 		RobotComponents parts;
-		parts.drive = &myRobot;
+		parts.drive = &m_mainDrive;
 		parts.driverStation = m_ds;
-		parts.elevator = &elevator;
+		parts.elevator = &m_elevator;
 
 
-		//Start camera
-		camera.OpenCamera();
-		camera.SetFPS(30);
-		camera.SetSize(300, 300);
-		camera.UpdateSettings();
+		//Start m_camera
+		m_camera.OpenCamera();
+		m_camera.SetFPS(30);
+		m_camera.SetSize(300, 300);
+		m_camera.UpdateSettings();
 
-		//Sends camera to the dashboard.
+		//Sends m_camera to the dashboard.
 		CameraServer::GetInstance()->StartAutomaticCapture(USBCamera::kDefaultCameraName);
 		CameraServer::GetInstance()->SetQuality(50);
 		CameraServer::GetInstance()->SetSize(300);
@@ -102,43 +102,43 @@ public:
 	}
 
 	// Main entry point for our code
-	void RobotMain()
+	void Robot::RobotMain()
 	{
 		// first and one-time initialization
 		RobotInit();
 
 		// Collect the parts of the robot to pass into the states
 		RobotComponents parts;
-		parts.drive = &myRobot;
+		parts.drive = &m_mainDrive;
 		parts.driverStation = m_ds;
-		parts.elevator = &elevator;
+		parts.elevator = &m_elevator;
 
 		// Start the robot disabled
-		curState = &disabled;
-		curState->OnEnter(parts);
+		m_curState = &disabled;
+		m_curState->OnEnter(parts);
 
 		// Main loop: Does not exit
 		while (true)
 		{
 			// Choose state
-			RobotState* lastState = curState;
-			curState = ChooseState();
+			RobotState* lastState = m_curState;
+			m_curState = ChooseState();
 
 			// Compare the two states by address to see if they are different
-			if (lastState != curState)
+			if (lastState != m_curState)
 			{
 				// Exit the last state
 				lastState->OnExit(parts);
 
 				// Enter the current state
-				curState->OnEnter(parts);
+				m_curState->OnEnter(parts);
 			}
 
 			// Update the current state
-			curState->Update(parts);
+			m_curState->Update(parts);
 
-			// Elevator needs to update here due to our saftey switches
-			elevator.Update();
+			// m_elevator needs to update here due to our safety switches
+			m_elevator.Update();
 
 			// Should be the last thing in the frame
 			// Wait for data from the driver station

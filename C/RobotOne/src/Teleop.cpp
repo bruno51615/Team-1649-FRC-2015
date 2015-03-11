@@ -30,19 +30,19 @@ Teleop::~Teleop()
 
 }
 
-void Teleop::Init(RobotComponents& parts)
+void Teleop::Init(Robot& parts)
 {
 
 }
 
-void Teleop::OnEnter(RobotComponents& parts)
+void Teleop::OnEnter(Robot& parts)
 {
-	parts.drive->MecanumDrive_Cartesian(0,0,0);
-	parts.elevator->Stop();
-	parts.driverStation->InOperatorControl(true);
+	parts.DriveSystem().MecanumDrive_Cartesian(0,0,0);
+	parts.ElevatorSystem().Stop();
+	parts.DriverStationSystem()->InOperatorControl(true);
 }
 
-void Teleop::Update(RobotComponents& parts)
+void Teleop::Update(Robot& parts)
 {
 	float mult = jos.GetThrottle();
 	float x = jos.GetX();
@@ -56,16 +56,16 @@ void Teleop::Update(RobotComponents& parts)
 	rho = doThrottle(subtractDeadzone(rho), 0, 1, mult);
 	float rot = doThrottle(subtractDeadzone(z), 0, 1, mult);
 
-	parts.drive->MecanumDrive_Polar(rho, theta, rot);
+	parts.DriveSystem().MecanumDrive_Polar(rho, theta, rot);
 
 	//Elevator update
 	switch(pov)
 	{
 	case 0:
-		parts.elevator->MoveUp();
+		parts.ElevatorSystem().MoveUp();
 		break;
 	case 180:
-		parts.elevator->MoveDown();
+		parts.ElevatorSystem().MoveDown();
 		break;
 	case 45:
 	case 90:
@@ -74,19 +74,20 @@ void Teleop::Update(RobotComponents& parts)
 	case 270:
 	case 315:
 	default:
-		parts.elevator->Stop();
+		parts.ElevatorSystem().Stop();
 		break;
 	}
 
-	if(parts.elevator->IsAtMid())
+	if(parts.ElevatorSystem().IsAtMid())
 	{
 		SmartDashboard:: PutString("Middle switch hit!", 0);
 	}
 }
 
-void Teleop::OnExit(RobotComponents& parts)
+void Teleop::OnExit(Robot& parts)
 {
-	parts.driverStation->InOperatorControl(false);
+	parts.DriverStationSystem()->InOperatorControl(false);
+
 }
 
 float Teleop::subtractDeadzone(float _this)

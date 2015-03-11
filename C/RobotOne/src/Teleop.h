@@ -8,7 +8,7 @@
 #ifndef SRC_TELEOP_H_
 #define SRC_TELEOP_H_
 
-#include "WPILib.h"
+#include <WPILib.h>
 #include "RobotState.h"
 
 namespace WPS {
@@ -17,10 +17,10 @@ class Teleop : public WPS::RobotState {
 public:
 	Teleop();
 	virtual ~Teleop();
-	virtual void Init(RobotComponents& parts); //Called once at the started of RobotMain
-	virtual void OnEnter(RobotComponents& parts); //Called each time the state is entered.
-	virtual void Update(RobotComponents& parts); //Called once per robot update frame.
-	virtual void OnExit(RobotComponents& parts); //Called each time the state is exited.
+	virtual void Init(Robot& parts); //Called once at the started of RobotMain
+	virtual void OnEnter(Robot& parts); //Called each time the state is entered.
+	virtual void Update(Robot& parts); //Called once per robot update frame.
+	virtual void OnExit(Robot& parts); //Called each time the state is exited.
 
 private:
 	Joystick jos;

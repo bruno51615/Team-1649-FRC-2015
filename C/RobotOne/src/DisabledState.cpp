@@ -20,26 +20,26 @@ DisabledState::~DisabledState() {
 	// TODO Auto-generated destructor stub
 }
 
-void DisabledState::Init(RobotComponents& parts)
+void DisabledState::Init(Robot& parts)
 {
 
 }
 
-void DisabledState::OnEnter(RobotComponents& parts)
+void DisabledState::OnEnter(Robot& parts)
 {
-	parts.drive->MecanumDrive_Cartesian(0,0,0);
-	parts.elevator->Stop();
-	parts.driverStation->InDisabled(true);
+	parts.DriveSystem().Drive(0, 0);
+	parts.ElevatorSystem().Stop();
+	parts.DriverStationSystem()->InDisabled(true);
 }
 
-void DisabledState::Update(RobotComponents& parts)
+void DisabledState::Update(Robot& parts)
 {
 
 }
 
-void DisabledState::OnExit(RobotComponents& parts)
+void DisabledState::OnExit(Robot& parts)
 {
-	parts.driverStation->InDisabled(false);
+	parts.DriverStationSystem()->InDisabled(false);
 }
 
 } /* namespace WPS */
