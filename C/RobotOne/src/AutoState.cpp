@@ -29,7 +29,7 @@ void AutoState::OnEnter(Robot& parts)
 	parts.DriveSystem().Drive(0.2, 0);
 	parts.DriveSystem().StopMotor(); //Robot Drive delay?
 	parts.ElevatorSystem().MoveUp();
-	parts.DriverStationSystem()->InDisabled(true);
+	parts.DriverStationSystem()->InAutonomous(true);
 }
 
 void AutoState::Update(Robot& parts)
@@ -39,6 +39,6 @@ void AutoState::Update(Robot& parts)
 
 void AutoState::OnExit(Robot& parts)
 {
-
+	parts.DriverStationSystem()->InAutonomous(false);
 }
 } /* namespace WPS */

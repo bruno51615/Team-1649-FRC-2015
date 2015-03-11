@@ -16,11 +16,11 @@ namespace WPS {
 
 Teleop::Teleop() :
 		jos(USBId1,		// USB port number
-			4,		// 4 axis: X, Y, Rotation, Throttle
-			10),	// Number of buttons
+			4,			// 4 axis: X, Y, Rotation, Throttle
+			10),		// Number of buttons
 		brick(USBId0,	// USB port number
-			  0,	// No axis
-			  9)	// Number of buttons
+			  0,		// No axis
+			  9)		// Number of buttons
 {
 
 }
