@@ -6,6 +6,7 @@
  */
 
 #include <AutoState.h>
+#include "Robot.h"
 
 namespace WPS {
 

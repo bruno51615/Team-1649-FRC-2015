@@ -8,6 +8,7 @@
 #include "DisabledState.h"
 #include "Common1649.h"
 #include "Elevator.h"
+#include "Robot.h"
 
 namespace WPS {
 

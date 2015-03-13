@@ -11,6 +11,7 @@
 #include "Elevator.h"
 #include <algorithm>
 #include <cmath>
+#include "Robot.h"
 
 namespace WPS {
 

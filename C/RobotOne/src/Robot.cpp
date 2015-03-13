@@ -10,28 +10,11 @@
  */
 
 #include "Common1649.h"
-#include "Elevator.h"
-#include "DisabledState.h"
-#include "Teleop.h"
+#include "Robot.h"
 
 namespace WPS
 {
 
-class Robot: public SampleRobot
-{
-	// Objects the robot owns
-	RobotDrive	m_mainDrive; 		// robot drive system
-	Elevator	m_elevator;		// m_elevator control system
-	USBCamera	m_camera;			// robot m_camera
-
-	// Robot control states
-	// AutoState	autonomous;
-	// TestState	test;
-	Teleop			teleop;
-	DisabledState	disabled;
-	RobotState*		m_curState;
-
-public:
 
 	// Robot constructor: Setup robot components to "safe" state
 	Robot::Robot() :
@@ -58,7 +41,7 @@ public:
 	RobotState* Robot::ChooseState()
 	{
 		// Default to disabled
-		RobotState* nextState = &disabled;
+		RobotState* nextState = &m_disabled;
 
 		if (IsEnabled())
 		{
@@ -72,7 +55,7 @@ public:
 			}
 			else if(IsOperatorControl())
 			{
-				m_curState = &teleop;
+				m_curState = &m_teleop;
 			}
 		}
 
@@ -81,13 +64,7 @@ public:
 
 	void Robot::RobotInit()
 	{
-		RobotComponents parts;
-		parts.drive = &m_mainDrive;
-		parts.driverStation = m_ds;
-		parts.elevator = &m_elevator;
-
-
-		//Start m_camera
+		/*//Start m_camera
 		m_camera.OpenCamera();
 		m_camera.SetFPS(30);
 		m_camera.SetSize(300, 300);
@@ -97,8 +74,8 @@ public:
 		CameraServer::GetInstance()->StartAutomaticCapture(USBCamera::kDefaultCameraName);
 		CameraServer::GetInstance()->SetQuality(50);
 		CameraServer::GetInstance()->SetSize(300);
-
-		disabled.Init(parts);
+		*/
+		m_disabled.Init(*this);
 	}
 
 	// Main entry point for our code
@@ -107,15 +84,9 @@ public:
 		// first and one-time initialization
 		RobotInit();
 
-		// Collect the parts of the robot to pass into the states
-		RobotComponents parts;
-		parts.drive = &m_mainDrive;
-		parts.driverStation = m_ds;
-		parts.elevator = &m_elevator;
-
 		// Start the robot disabled
-		m_curState = &disabled;
-		m_curState->OnEnter(parts);
+		m_curState = &m_disabled;
+		m_curState->OnEnter(*this);
 
 		// Main loop: Does not exit
 		while (true)
@@ -128,14 +99,14 @@ public:
 			if (lastState != m_curState)
 			{
 				// Exit the last state
-				lastState->OnExit(parts);
+				lastState->OnExit(*this);
 
 				// Enter the current state
-				m_curState->OnEnter(parts);
+				m_curState->OnEnter(*this);
 			}
 
 			// Update the current state
-			m_curState->Update(parts);
+			m_curState->Update(*this);
 
 			// m_elevator needs to update here due to our safety switches
 			m_elevator.Update();
@@ -145,7 +116,6 @@ public:
 			m_ds->WaitForData();
 		}
 	}
-};
 
 }
 

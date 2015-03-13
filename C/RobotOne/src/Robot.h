@@ -10,9 +10,13 @@
 
 #include "Elevator.h"
 #include <WPIlib.h>
+#include "Teleop.h"
+#include "AutoState.h"
+#include "DisabledState.h"
 
 namespace WPS
 {
+
 class Robot: public SampleRobot
 {
 public:

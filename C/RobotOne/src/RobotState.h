@@ -8,8 +8,6 @@
 #ifndef SRC_ROBOTSTATE_H_
 #define SRC_ROBOTSTATE_H_
 
-#include "Robot.h"
-
 namespace WPS
 {
 
